@@ -42,24 +42,29 @@ public class MaabsbookstoreApplication {
             bookRepository.save(new Book("The Shining", "Stephen King", 1977, "9780307743657", 14.99, horror));
             bookRepository.save(new Book("It", "Stephen King", 1986, "9781501142970", 18.99, horror));
 
-        BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
-        
-        AppUser user1 = new AppUser("user", 
-            bcrypt.encode("user"), 
-            "user@bookstore.com", 
-            "USER");
-        
-        AppUser user2 = new AppUser("admin", 
-            bcrypt.encode("admin"), 
-            "admin@bookstore.com", 
-            "ADMIN");
-            
-        userRepository.save(user1);
-        userRepository.save(user2);
-        
-        System.out.println("Sample users created:");
-        System.out.println("user / user (USER role)");
-        System.out.println("admin / admin (ADMIN role)");
+BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
+
+if (!userRepository.existsByUsername("user")) {
+    AppUser user1 = new AppUser(
+        "user", 
+        bcrypt.encode("user"), 
+        "user@bookstore.com", 
+        "USER"
+    );
+    userRepository.save(user1);
+}
+
+if (!userRepository.existsByUsername("admin")) {
+    AppUser user2 = new AppUser(
+        "admin", 
+        bcrypt.encode("admin"), 
+        "admin@bookstore.com", 
+        "ADMIN"
+    );
+    userRepository.save(user2);
+}
+
+System.out.println("Sample users created or already exist:");
     };
     }
 }
